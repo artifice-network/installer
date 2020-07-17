@@ -8,7 +8,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/artifice-network/installer"
 
-keywords = ["artifice", "task scheduler"]
+keywords = ["artifice", "scheduler"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -1,8 +1,4 @@
-use dirs::*;
-
 use std::fmt;
-use std::iter::{IntoIterator, Iterator};
-use std::path::{PathBuf, Path};
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread;
@@ -193,7 +189,7 @@ pub enum ConfigSrc{
 }
 /// this struct is used for the operation of the installation process
 pub struct Installer<E: 'static + std::error::Error + Send + Sync, DB: 'static + Database<E> + Send + Sync> {
-    install_src: InstallationSrc,
+    _install_src: InstallationSrc,
     schedule: TaskSchedule<E, DB>,
     config_src: ConfigSrc,
     installation: DB,
@@ -227,7 +223,7 @@ impl<E: std::error::Error + Send + Sync, DB: Database<E> + Send + Sync> Installe
     ///
     pub fn new(install_src: InstallationSrc, database: DB, thread_count: u8, task_duration: Duration) -> Self{
         let schedule = TaskSchedule::new(thread_count, task_duration);
-        Self {install_src, schedule, config_src: ConfigSrc::Empty, installation: database, error: std::marker::PhantomData}
+        Self {_install_src: install_src, schedule, config_src: ConfigSrc::Empty, installation: database, error: std::marker::PhantomData}
     }
     /// update the config src from generating new config to using existing configs
     pub fn config_src(mut self, config_src: ConfigSrc) -> Self{

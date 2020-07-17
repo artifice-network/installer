@@ -4,7 +4,7 @@ use std::fmt;
 use std::iter::{IntoIterator, Iterator};
 use std::path::{PathBuf, Path};
 use std::sync::mpsc::{channel, Receiver, Sender};
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use networking::peers::ArtificePeer;
@@ -18,7 +18,7 @@ use std::marker::PhantomData;
 pub struct Task<E: std::error::Error + Send + Sync, DB: Database<E> + Send + Sync> {
     task_id: u16,
     name: String,
-    task: Arc<Box<dyn Fn(Arc<DB>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> + Send + Sync>>,
+    task: Arc<Box<dyn Fn(Arc<DB>, Arc<Mutex<Vec<(String, u16)>>>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> + Send + Sync>>,
     phantom: PhantomData<E>,
 }
 impl<E: std::error::Error + Send + Sync, DB: Database<E> + Send + Sync> fmt::Debug for Task<E, DB> {
@@ -47,7 +47,7 @@ impl<E: std::error::Error + Send + Sync, DB: Database<E> + Send + Sync> Task<E, 
     /// ```
     pub fn new<F>(task_id: u16, name: &str, func: F) -> Self
     where
-        F: Fn(Arc<DB>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> + 'static + Send + Sync,
+        F: Fn(Arc<DB>, Arc<Mutex<Vec<(String, u16)>>>) -> Result<(), Box<dyn std::error::Error + Send + Sync>> + 'static + Send + Sync,
     {
         Self {
             task_id,
@@ -59,9 +59,10 @@ impl<E: std::error::Error + Send + Sync, DB: Database<E> + Send + Sync> Task<E, 
     pub fn run(
         self,
         database: Arc<DB>,
+        completed: Arc<Mutex<Vec<(String, u16)>>>,
     ) -> Result<(String, u16), ((String, u16), Box<dyn std::error::Error + Send + Sync>)> {
         let task = self.task;
-        match task(database) {
+        match task(database, completed) {
             Ok(()) => Ok((self.name, self.task_id)),
             Err(e) => Err(((self.name, self.task_id), e)),
         }
@@ -131,6 +132,7 @@ impl<E: 'static + std::error::Error + Send + Sync, DB: 'static + Database<E> + S
         mut self,
         database: Arc<DB>,
     ) -> Result<(String, u16), ((String, u16), Box<dyn std::error::Error + Send + Sync>)> {
+        let comp: Arc<Mutex<Vec<(String, u16)>>> = Arc::new(Mutex::new(Vec::new()));
         let mut tasks_complete = 0;
         let tasks_total = self.tasks.len();
         let sender = self.sender.clone();
@@ -139,8 +141,9 @@ impl<E: 'static + std::error::Error + Send + Sync, DB: 'static + Database<E> + S
                 println!("starting task: {} with id: {}", task.name(), task.id());
                 let newsender = sender.clone();
                 let db = database.clone();
+                let completed = comp.clone();
                 thread::spawn(move || {
-                    newsender.send(task.run(db)).unwrap();
+                    newsender.send(task.run(db, completed.clone())).unwrap();
                 });
             }
         }
@@ -152,12 +155,16 @@ impl<E: 'static + std::error::Error + Send + Sync, DB: 'static + Database<E> + S
                         "task: {}, with id: {} completed successfully, {}/{}",
                         name, id, tasks_complete, tasks_total
                     );
+                    let mut done = comp.lock().unwrap();
+                    done.push((name, id));
+                    std::mem::drop(done);
                     if let Some(task) = self.tasks.pop() {
                         println!("starting task: {} with id: {}", task.name(), task.id());
                         let nextsender = self.sender.clone();
                         let db = database.clone();
+                        let completed = comp.clone();
                         thread::spawn(move || {
-                            nextsender.send(task.run(db)).unwrap();
+                            nextsender.send(task.run(db, completed.clone())).unwrap();
                         });
                     } else {
                         return Ok(("".to_string(), 0));

@@ -1,8 +1,14 @@
 [package]
-name = "installer"
+name = "artifice-installer"
 version = "0.1.0"
+description = "this crate serves as the installer for the artifice network, however it can also be used as a simple task scheduler"
 authors = ["Julian Lazaras <umbrasdracodominus@gmail.com>"]
 edition = "2018"
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/artifice-network/installer"
+
+keywords = ["artifice", "task scheduler"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

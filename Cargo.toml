@@ -1,6 +1,6 @@
 [package]
 name = "installer"
-version = "0.1.0"
+version = "0.1.0-alpha1"
 description = "this crate serves as the installer for the artifice network, however it can also be used as a simple task scheduler"
 authors = ["Julian Lazaras <umbrasdracodominus@gmail.com>"]
 edition = "2018"

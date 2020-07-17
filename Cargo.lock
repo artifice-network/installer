@@ -330,7 +330,7 @@ dependencies = [
 
 [[package]]
 name = "installer"
-version = "0.1.0"
+version = "0.1.0-alpha1"
 dependencies = [
  "dirs 3.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "manager 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",

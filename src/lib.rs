@@ -6,7 +6,7 @@ this crate serves as the installer for the artifice network, however it can also
 
 ```
 use manager::{ArtificeDB, Database};
-use artifice-installer::installation::*;
+use installer::installation::*;
 use std::time::Duration;
 use manager::database::ArtificePeers;
 use std::io::{Read, Write};

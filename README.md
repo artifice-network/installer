@@ -14,7 +14,7 @@ manager = "*"
 
 ```rust
 use manager::{ArtificeDB, Database};
-use artifice_installer::installation::*;
+use installer::installation::*;
 use std::time::Duration;
 use manager::database::ArtificePeers;
 use std::io::{Read, Write};

@@ -1,5 +1,5 @@
 [package]
-name = "artifice-installer"
+name = "installer"
 version = "0.1.0"
 description = "this crate serves as the installer for the artifice network, however it can also be used as a simple task scheduler"
 authors = ["Julian Lazaras <umbrasdracodominus@gmail.com>"]
@@ -13,9 +13,9 @@ keywords = ["artifice", "task scheduler"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serde = "*"
-serde_derive = "*"
-serde_json = "*"
-dirs = "*"
-networking = {path = "../networking"}
-manager = {path = "../manager"}
+serde = "1.0.114"
+serde_derive = "1.0.114"
+serde_json = "1.0.56"
+dirs = "3.0.1"
+networking = "0.1.2"
+manager = "0.1.1"

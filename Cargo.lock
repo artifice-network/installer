@@ -24,6 +24,18 @@ version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "artifice-installer"
+version = "0.1.0-alpha1"
+dependencies = [
+ "dirs 3.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "manager 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "networking 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.114 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_derive 1.0.114 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.56 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "autocfg"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -326,18 +338,6 @@ dependencies = [
  "cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.71 (registry+https://github.com/rust-lang/crates.io-index)",
  "wasi 0.9.0+wasi-snapshot-preview1 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "installer"
-version = "0.1.0-alpha1"
-dependencies = [
- "dirs 3.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "manager 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "networking 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 1.0.114 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_derive 1.0.114 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_json 1.0.56 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

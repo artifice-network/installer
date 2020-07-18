@@ -35,6 +35,7 @@ fn main() {
         // kept unused until complete install possible
         let _peers: ArtificePeers = database.create_table("peers".to_string(), &password.clone().into_bytes())?;
         let _config: ArtificeConfig = database.load_entry("config".to_string(), &password.clone().into_bytes())?;
+        
         Ok(())
     });
     installer.add_task(first_task);
